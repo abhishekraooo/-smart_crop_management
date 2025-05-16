@@ -3,24 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
-void main() {
-  runApp(const FertilizerApp());
-}
-
-class FertilizerApp extends StatelessWidget {
-  const FertilizerApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fertilizer Advisor',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const FertilizerForm(),
-    );
-  }
-}
 
 class FertilizerForm extends StatefulWidget {
   const FertilizerForm({super.key});

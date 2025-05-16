@@ -47,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CropPredictionScreen(),
+                        builder: (context) => LanguageSelectionPage(),
                       ),
                     );
                   },

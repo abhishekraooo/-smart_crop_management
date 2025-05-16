@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/pages/crop_recommendation(npk)/crop_prediction_screen.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
@@ -26,13 +27,13 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'English',
                   Icons.language,
-                  const FertilizerForm(),
+                  const CropPredictionScreen(),
                 ),
                 _buildStyledButton(
                   context,
-                  'हिंदी',
+                  'Fertilizer',
                   Icons.language,
-                  const Page2(),
+                  const FertilizerForm(),
                 ),
                 _buildStyledButton(
                   context,
