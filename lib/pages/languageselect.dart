@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hacksprint_mandya/fertilizer.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
@@ -25,7 +26,7 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'English',
                   Icons.language,
-                  const Page1(),
+                  const FertilizerForm(),
                 ),
                 _buildStyledButton(
                   context,
