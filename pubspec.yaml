@@ -67,6 +67,8 @@ flutter:
     - assets/tflite/crop_prediction_model.tflite
     - assets/labels/label.txt
     - assets/ranges/feature_ranges.json
+    - assets/images/background.jpg
+    - assets/animations/splash_farmer.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
