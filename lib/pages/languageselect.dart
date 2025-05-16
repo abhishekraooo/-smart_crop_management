@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/model.dart';
 import 'package:hacksprint_mandya/pages/crop_recommendation(npk)/crop_prediction_screen.dart';
-
+import 'package:hacksprint_mandya/model.dart';
+import 'package:hacksprint_mandya/sensordashboard.dart';
+import 'insurance.dart';
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
 
@@ -37,9 +40,9 @@ class LanguageSelectionPage extends StatelessWidget {
                 ),
                 _buildStyledButton(
                   context,
-                  'বাংলা',
+                  'model',
                   Icons.language,
-                  const Page3(),
+                   ClassifierScreen(),
                 ), // Bengali
               ],
             ),
@@ -50,15 +53,15 @@ class LanguageSelectionPage extends StatelessWidget {
               children: [
                 _buildStyledButton(
                   context,
-                  'मराठी',
+                  'sensor',
                   Icons.language,
-                  const Page4(),
+                   SensorDashboard(),
                 ),
                 _buildStyledButton(
                   context,
-                  'తెలుగు',
+                  'insurance',
                   Icons.language,
-                  const Page5(),
+                  const InsurancePage(),
                 ),
                 _buildStyledButton(
                   context,
