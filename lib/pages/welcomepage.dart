@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart'; // Add this import
 import 'crop_recommendation(npk)/crop_prediction_screen.dart';
 import 'languageselect.dart';
 
@@ -11,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           // Background Image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background.jpg'),
                 fit: BoxFit.cover,
@@ -23,7 +24,13 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/logo.gif', width: 400, height: 400),
+                // Replace Image.asset with Lottie animation
+                Lottie.asset(
+                  'assets/animations/splash_farmer.json', // Path to your Lottie JSON file
+                  width: 400,
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
                 Text(
                   "Chiguru",
                   style: GoogleFonts.poppins(
@@ -47,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LanguageSelectionPage(),
+                        builder: (context) => CropPredictionScreen(),
                       ),
                     );
                   },
