@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
 import 'package:hacksprint_mandya/model.dart';
+import 'package:hacksprint_mandya/pages/byproduct.dart';
 import 'package:hacksprint_mandya/pages/crop_recommendation(npk)/crop_prediction_screen.dart';
 import 'package:hacksprint_mandya/model.dart';
 import 'package:hacksprint_mandya/sensordashboard.dart';
+import 'byproduct.dart';
 import 'insurance.dart';
+import 'shapeshift.dart';
+import 'marketrate.dart';
+
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
 
@@ -16,7 +21,7 @@ class LanguageSelectionPage extends StatelessWidget {
         backgroundColor: Colors.green.shade800, // Set AppBar color to green
       ),
       backgroundColor:
-      Colors.green.shade50, // Set page background color to light green
+          Colors.green.shade50, // Set page background color to light green
       body: Padding(
         padding: const EdgeInsets.all(16), // Add padding around the buttons
         child: Column(
@@ -28,7 +33,7 @@ class LanguageSelectionPage extends StatelessWidget {
               children: [
                 _buildStyledButton(
                   context,
-                  'English',
+                  'CropPrediction',
                   Icons.language,
                   const CropPredictionScreen(),
                 ),
@@ -40,9 +45,9 @@ class LanguageSelectionPage extends StatelessWidget {
                 ),
                 _buildStyledButton(
                   context,
-                  'model',
+                  'Disease',
                   Icons.language,
-                   ClassifierScreen(),
+                  ClassifierScreen(),
                 ), // Bengali
               ],
             ),
@@ -55,7 +60,7 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'sensor',
                   Icons.language,
-                   SensorDashboard(),
+                  SensorDashboard(),
                 ),
                 _buildStyledButton(
                   context,
@@ -65,9 +70,9 @@ class LanguageSelectionPage extends StatelessWidget {
                 ),
                 _buildStyledButton(
                   context,
-                  'தமிழ்',
+                  'byproduct',
                   Icons.language,
-                  const Page6(),
+                  const ByProductScreen(),
                 ),
               ],
             ),
@@ -78,15 +83,15 @@ class LanguageSelectionPage extends StatelessWidget {
               children: [
                 _buildStyledButton(
                   context,
-                  'ಕನ್ನಡ',
+                  'Crop History',
                   Icons.language,
-                  const Page7(),
+                   CropHistoryScreen(),
                 ),
                 _buildStyledButton(
                   context,
-                  'മലയാളം',
+                  'Shape Shift',
                   Icons.language,
-                  const Page8(),
+                  const ShapeShiftPAge(),
                 ), // Malayalam
                 _buildStyledButton(
                   context,
@@ -117,11 +122,11 @@ class LanguageSelectionPage extends StatelessWidget {
 
   // Helper method to create a styled button
   Widget _buildStyledButton(
-      BuildContext context,
-      String label,
-      IconData icon,
-      Widget page,
-      ) {
+    BuildContext context,
+    String label,
+    IconData icon,
+    Widget page,
+  ) {
     return InkWell(
       onTap: () {
         // Navigate to the respective page

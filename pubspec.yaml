@@ -42,6 +42,7 @@ dependencies:
   flutter_tts: ^4.2.2
   image_picker: ^1.1.2
   image: ^4.5.4
+  syncfusion_flutter_charts: ^29.2.4
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,12 @@ flutter:
     - assets/ranges/feature_ranges.json
     - assets/images/background.jpg
     - assets/animations/splash_farmer.json
+    - assets/images/potato.jpg
+    - assets/images/corn.jpg
+    - assets/images/okra.jpg
+    - assets/images/cauliflower.jpg
+    - assets/images/pepper.jpg
+    - assets/images/onion.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
