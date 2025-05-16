@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hacksprint_mandya/fertilizer.dart';
-import 'package:hacksprint_mandya/pages/crop_recommendation(npk)/crop_prediction_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hacksprint_mandya/languages/bengali/crop_recommendation(npk)/crop_prediction_screen_be.dart';
+import 'package:hacksprint_mandya/languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
+import 'package:hacksprint_mandya/languages/hindi/crop_recommendation(npk)/crop_prediction_screen_hi.dart';
+import 'package:hacksprint_mandya/languages/kannada/crop_recommendation(npk)/crop_prediction_screen_ka.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
@@ -8,17 +11,27 @@ class LanguageSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Language'),
-        backgroundColor: Colors.green.shade800, // Set AppBar color to green
-      ),
-      backgroundColor:
-      Colors.green.shade50, // Set page background color to light green
+      appBar: AppBar(title: null, backgroundColor: Colors.green.shade100),
+      backgroundColor: Colors.green.shade100,
       body: Padding(
-        padding: const EdgeInsets.all(16), // Add padding around the buttons
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Select your Language",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green.shade900,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            const SizedBox(height: 25),
             // Row 1: Buttons 1-3
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -26,84 +39,64 @@ class LanguageSelectionPage extends StatelessWidget {
                 _buildStyledButton(
                   context,
                   'English',
-                  Icons.language,
+                  'E',
                   const CropPredictionScreen(),
                 ),
                 _buildStyledButton(
                   context,
-                  'Fertilizer',
-                  Icons.language,
-                  const FertilizerForm(),
+                  'हिंदी',
+                  'ह',
+                  const CropPredictionScreenHI(),
                 ),
                 _buildStyledButton(
                   context,
-                  'বাংলা',
-                  Icons.language,
-                  const Page3(),
-                ), // Bengali
+                  'ಕನ್ನಡ',
+                  'ಕ',
+                  const CropPredictionScreenKA(),
+                ),
               ],
             ),
-            const SizedBox(height: 20), // Add spacing between rows
+            const SizedBox(height: 20),
             // Row 2: Buttons 4-6
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStyledButton(
-                  context,
-                  'मराठी',
-                  Icons.language,
-                  const Page4(),
-                ),
-                _buildStyledButton(
-                  context,
-                  'తెలుగు',
-                  Icons.language,
-                  const Page5(),
-                ),
-                _buildStyledButton(
-                  context,
-                  'தமிழ்',
-                  Icons.language,
-                  const Page6(),
-                ),
+                _buildStyledButton(context, 'मराठी', 'म', const Page4()),
+                _buildStyledButton(context, 'తెలుగు', 'త', const Page5()),
+                _buildStyledButton(context, 'தமிழ்', 'த', const Page6()),
               ],
             ),
-            const SizedBox(height: 20), // Add spacing between rows
+            const SizedBox(height: 20),
             // Row 3: Buttons 7-9
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildStyledButton(
                   context,
-                  'ಕನ್ನಡ',
-                  Icons.language,
-                  const Page7(),
-                ),
+                  'বাংলা',
+                  'ব',
+                  const CropPredictionScreenBE(),
+                ), // Bengali
                 _buildStyledButton(
                   context,
                   'മലയാളം',
-                  Icons.language,
+                  'മ',
                   const Page8(),
                 ), // Malayalam
                 _buildStyledButton(
                   context,
                   'ગુજરાતી',
-                  Icons.language,
+                  'ગ',
                   const Page9(),
                 ), // Gujarati
               ],
             ),
-            const SizedBox(height: 20), // Add spacing between rows
+            const SizedBox(height: 20),
             // Row 4: Button 10
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildStyledButton(
-                  context,
-                  'اُردُو',
-                  Icons.language,
-                  const Page10(),
-                ),
+                _buildStyledButton(context, 'اُردُو', 'ا', const Page10()),
               ],
             ),
           ],
@@ -112,37 +105,31 @@ class LanguageSelectionPage extends StatelessWidget {
     );
   }
 
-  // Helper method to create a styled button
+  // Modified helper method to use text instead of icon
   Widget _buildStyledButton(
-      BuildContext context,
-      String label,
-      IconData icon,
-      Widget page,
-      ) {
+    BuildContext context,
+    String label,
+    String firstLetter,
+    Widget page,
+  ) {
     return InkWell(
       onTap: () {
-        // Navigate to the respective page
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
-      borderRadius: BorderRadius.circular(20), // Rounded corners
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        width: 100, // Fixed width for consistency
-        height: 100, // Fixed height for consistency
+        width: 100,
+        height: 100,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Colors.green.shade600,
-              Colors.green.shade400,
-            ], // Gradient effect
+            colors: [Colors.green.shade600, Colors.green.shade400],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(20), // Rounded corners
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.shade200.withAlpha(
-                128,
-              ), // Use .withAlpha() instead of .withOpacity()
+              color: Colors.green.shade200.withAlpha(128),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -151,15 +138,22 @@ class LanguageSelectionPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: Colors.white), // Icon
-            const SizedBox(height: 8), // Spacing between icon and text
+            Text(
+              firstLetter,
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
             Text(
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // White text
+                color: Colors.white,
               ),
             ),
           ],
@@ -169,6 +163,7 @@ class LanguageSelectionPage extends StatelessWidget {
   }
 }
 
+// Keep your existing page classes (Page1 to Page10) unchanged
 // Example pages for navigation
 class Page1 extends StatelessWidget {
   const Page1({super.key});
