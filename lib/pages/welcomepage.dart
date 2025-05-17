@@ -4,6 +4,8 @@ import 'package:lottie/lottie.dart'; // Add this import
 import '../languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
 import '../languages/english/chatbot.dart';
 import 'languageselect.dart';
+import 'governmentschemes.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -55,7 +57,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChatScreen(),
+                        builder: (context) => CropSchemesDropdownPage(),
                       ),
                     );
                   },
