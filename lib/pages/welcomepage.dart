@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart'; // Add this import
-import 'crop_recommendation(npk)/crop_prediction_screen.dart';
+import '../languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
 import 'languageselect.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -36,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.shade900,
+                    color: Colors.purple.shade900,
                   ),
                 ),
                 Text(
@@ -44,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.lato(
                     fontSize: 20,
-                    color: Colors.green.shade900,
+                    color: Colors.brown.shade900,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -60,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green.shade50,
-                    foregroundColor: Colors.green.shade900,
+                    foregroundColor: Colors.purple.shade900,
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(15),
                   ),

@@ -6,8 +6,9 @@ class TfliteService {
   late Interpreter _interpreter;
   bool _isModelLoaded = false;
   List<String> _labels = [];
-
+  late List<List<double>> _lastProbabilities;
   List<String> get labels => _labels;
+  late List<Map<String, double>> _lastPredictions;
 
   /// Load the TFLite model from assets
   Future<void> loadModel() async {
@@ -16,7 +17,7 @@ class TfliteService {
       final modelData = await rootBundle.load(modelPath);
       final Uint8List modelBytes = modelData.buffer.asUint8List();
 
-      _interpreter = await Interpreter.fromBuffer(modelBytes);
+      _interpreter = Interpreter.fromBuffer(modelBytes);
       _isModelLoaded = true;
       print("✅ Model loaded successfully.");
     } catch (e) {
@@ -42,8 +43,20 @@ class TfliteService {
     }
   }
 
-  /// Predict top N crops based on input values
-  Future<List<String>> predictTopNCrops(
+  /// Standard Scaler (matches scikit-learn's StandardScaler)
+  List<double> _standardScale(
+    List<double> values, {
+    required List<double> mean,
+    required List<double> std,
+  }) {
+    assert(values.length == mean.length && mean.length == std.length);
+    return values.asMap().entries.map((e) {
+      return (e.value - mean[e.key]) / std[e.key];
+    }).toList();
+  }
+
+  /// Predict top N crops based on input values and return them with probabilities
+  Future<List<Map<String, double>>> predictTopNCropsWithProb(
     List<double> input, {
     required List<double> mean,
     required List<double> std,
@@ -52,7 +65,6 @@ class TfliteService {
     if (_labels.isEmpty) throw Exception("Labels not loaded");
     if (!_isModelLoaded) throw Exception("Model not loaded");
 
-    // Standard scale input
     final scaledInput = _standardScale(input, mean: mean, std: std);
 
     final inputTensor = [scaledInput.map((e) => e.toDouble()).toList()];
@@ -65,29 +77,34 @@ class TfliteService {
       _interpreter.run(inputTensor, outputTensor);
 
       List<MapEntry<String, double>> cropProbs = [];
-
       for (int i = 0; i < outputTensor[0].length; i++) {
         cropProbs.add(MapEntry(_labels[i], outputTensor[0][i]));
       }
 
       cropProbs.sort((a, b) => b.value.compareTo(a.value));
 
-      return cropProbs.take(topN).map((entry) => entry.key).toList();
+      // Convert to List<Map<String, double>>
+      final result =
+          cropProbs
+              .take(topN)
+              .map((entry) => {entry.key: entry.value})
+              .toList();
+
+      // Save last predictions
+      _lastPredictions = result;
+
+      return result;
     } catch (e) {
       throw Exception("❌ Prediction failed: $e");
     }
   }
 
-  /// Standard Scaler (matches scikit-learn's StandardScaler)
-  List<double> _standardScale(
-    List<double> values, {
-    required List<double> mean,
-    required List<double> std,
-  }) {
-    assert(values.length == mean.length && mean.length == std.length);
-    return values.asMap().entries.map((e) {
-      return (e.value - mean[e.key]) / std[e.key];
-    }).toList();
+  /// Return last predicted probabilities
+  List<Map<String, double>> getLastPredictions() {
+    if (_lastPredictions == null || _lastPredictions.isEmpty) {
+      throw Exception("No prediction has been made yet.");
+    }
+    return _lastPredictions;
   }
 
   /// Close interpreter when done
