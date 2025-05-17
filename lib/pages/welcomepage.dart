@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart'; // Add this import
 import '../languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
+import '../languages/english/chatbot.dart';
 import 'languageselect.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -54,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LanguageSelectionPage(),
+                        builder: (context) => ChatScreen(),
                       ),
                     );
                   },
