@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:hacksprint_mandya/utils/language_strings.dart';
 
-class CropResultScreenKA extends StatelessWidget {
+class CropResultScreenMR extends StatelessWidget {
   final String mainCrop;
   final List<String> sideCrops;
   final List<double> probabilities;
-  final LanguageStrings _strings = KannadaStrings();
+  final LanguageStrings _strings = MarathiStrings();
 
-  CropResultScreenKA({
+  CropResultScreenMR({
     Key? key,
     required this.mainCrop,
     required this.sideCrops,

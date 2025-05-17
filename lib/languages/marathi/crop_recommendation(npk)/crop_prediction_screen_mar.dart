@@ -6,17 +6,17 @@ import 'package:hacksprint_mandya/utils/language_strings.dart';
 import '../../../utils/feature_range.dart';
 import '../../../utils/tflite_service.dart';
 
-class CropPredictionScreenKA extends StatefulWidget {
-  const CropPredictionScreenKA({Key? key}) : super(key: key);
+class CropPredictionScreenMR extends StatefulWidget {
+  const CropPredictionScreenMR({Key? key}) : super(key: key);
 
   @override
-  State<CropPredictionScreenKA> createState() => _CropPredictionScreenHIState();
+  State<CropPredictionScreenMR> createState() => _CropPredictionScreenHIState();
 }
 
-class _CropPredictionScreenHIState extends State<CropPredictionScreenKA> {
+class _CropPredictionScreenHIState extends State<CropPredictionScreenMR> {
   final TfliteService _tflite = TfliteService();
   late Map<String, FeatureRange> featureRanges;
-  final LanguageStrings _strings = KannadaStrings();
+  final LanguageStrings _strings = MarathiStrings();
 
   bool _isInitialized = false;
   String _predictedCrop = "Predicted Crops";

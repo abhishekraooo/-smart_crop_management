@@ -6,7 +6,6 @@ import '../languages/english/chatbot.dart';
 import 'languageselect.dart';
 import 'governmentschemes.dart';
 
-
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CropSchemesDropdownPage(),
+                        builder: (context) => LanguageSelectionPage(),
                       ),
                     );
                   },

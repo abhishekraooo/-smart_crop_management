@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hacksprint_mandya/auth/auth_service.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/languages/bengali/crop_recommendation(npk)/crop_prediction_screen_be.dart';
 import 'package:hacksprint_mandya/languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
+import 'package:hacksprint_mandya/languages/gujarati/crop_recommendation(npk)/crop_prediction_screen_gu.dart';
+import 'package:hacksprint_mandya/languages/hindi/crop_recommendation(npk)/crop_prediction_screen_hi.dart';
+import 'package:hacksprint_mandya/languages/kannada/crop_recommendation(npk)/crop_prediction_screen_ka.dart';
+import 'package:hacksprint_mandya/languages/malayalam/crop_recommendation(npk)/crop_prediction_screen_ma.dart';
+import 'package:hacksprint_mandya/languages/marathi/crop_recommendation(npk)/crop_prediction_screen_mar.dart';
+import 'package:hacksprint_mandya/languages/tamil/crop_recommendation(npk)/crop_prediction_screen_tam.dart';
+import 'package:hacksprint_mandya/languages/telugu/crop_recommendation(npk)/crop_prediction_screen_tel.dart';
+import 'package:hacksprint_mandya/languages/urdu/crop_recommendation(npk)/crop_prediction_screen_ur.dart';
 import 'package:hacksprint_mandya/model.dart';
 import 'package:hacksprint_mandya/utils/home_navigators.dart';
 
@@ -47,13 +56,13 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'हिंदी',
                   'ह',
-                  const ClassifierScreen(),
+                  CropPredictionScreenHI(),
                 ),
                 _buildStyledButton(
                   context,
                   'ಕನ್ನಡ',
                   'ಕ',
-                  const FertilizerApp(),
+                  CropPredictionScreenKA(),
                 ),
               ],
             ),
@@ -62,9 +71,24 @@ class LanguageSelectionPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStyledButton(context, 'मराठी', 'म', const Page4()),
-                _buildStyledButton(context, 'తెలుగు', 'త', const Page5()),
-                _buildStyledButton(context, 'தமிழ்', 'த', const Page6()),
+                _buildStyledButton(
+                  context,
+                  'मराठी',
+                  'म',
+                  CropPredictionScreenMR(),
+                ),
+                _buildStyledButton(
+                  context,
+                  'తెలుగు',
+                  'త',
+                  CropPredictionScreenTE(),
+                ),
+                _buildStyledButton(
+                  context,
+                  'தமிழ்',
+                  'த',
+                  CropPredictionScreenTA(),
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -76,19 +100,19 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'বাংলা',
                   'ব',
-                  const Page1(),
+                  CropPredictionScreenBE(),
                 ), // Bengali
                 _buildStyledButton(
                   context,
                   'മലയാളം',
                   'മ',
-                  const Page8(),
+                  CropPredictionScreenMA(),
                 ), // Malayalam
                 _buildStyledButton(
                   context,
                   'ગુજરાતી',
                   'ગ',
-                  const Page9(),
+                  CropPredictionScreenGU(),
                 ), // Gujarati
               ],
             ),
@@ -97,7 +121,12 @@ class LanguageSelectionPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildStyledButton(context, 'اُردُو', 'ا', const Page10()),
+                _buildStyledButton(
+                  context,
+                  'اُردُو',
+                  'ا',
+                  CropPredictionScreenUR(),
+                ),
               ],
             ),
           ],

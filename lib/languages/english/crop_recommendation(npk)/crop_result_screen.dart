@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hacksprint_mandya/auth/auth_service.dart';
+import 'package:hacksprint_mandya/languages/english/crop_dashboard.dart';
+import 'package:hacksprint_mandya/utils/home_navigators.dart';
 
 class CropResultScreen extends StatelessWidget {
   final String mainCrop;
@@ -23,7 +26,7 @@ class CropResultScreen extends StatelessWidget {
         title: null,
         backgroundColor: Colors.green.shade100,
       ),
-      backgroundColor: Colors.green[100], // Light purple background
+      backgroundColor: Colors.green[100],
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -105,6 +108,27 @@ class CropResultScreen extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+            ),
+
+            // Home Icon Button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0, top: 10),
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(Icons.home, size: 32),
+                  color: Colors.green,
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                MainNavigation(authService: AuthService()),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
