@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hacksprint_mandya/auth/auth_service.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
-import 'package:hacksprint_mandya/pages/crop_recommendation(npk)/crop_prediction_screen.dart';
+import 'package:hacksprint_mandya/model.dart';
+import 'package:hacksprint_mandya/utils/home_navigators.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
@@ -8,12 +11,8 @@ class LanguageSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Language'),
-        backgroundColor: Colors.green.shade800, // Set AppBar color to green
-      ),
-      backgroundColor:
-          Colors.green.shade50, // Set page background color to light green
+      appBar: AppBar(title: null, backgroundColor: Colors.green.shade100),
+      backgroundColor: Colors.green.shade100,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -40,21 +39,21 @@ class LanguageSelectionPage extends StatelessWidget {
                 _buildStyledButton(
                   context,
                   'English',
-                  Icons.language,
-                  const CropPredictionScreen(),
+                  'E',
+                  MainNavigation(authService: AuthService()),
                 ),
                 _buildStyledButton(
                   context,
                   'हिंदी',
                   'ह',
-                  const CropPredictionScreenHI(),
+                  const ClassifierScreen(),
                 ),
                 _buildStyledButton(
                   context,
-                  'বাংলা',
-                  Icons.language,
-                  const Page3(),
-                ), // Bengali
+                  'ಕನ್ನಡ',
+                  'ಕ',
+                  const FertilizerApp(),
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -62,24 +61,9 @@ class LanguageSelectionPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStyledButton(
-                  context,
-                  'मराठी',
-                  Icons.language,
-                  const Page4(),
-                ),
-                _buildStyledButton(
-                  context,
-                  'తెలుగు',
-                  Icons.language,
-                  const Page5(),
-                ),
-                _buildStyledButton(
-                  context,
-                  'தமிழ்',
-                  Icons.language,
-                  const Page6(),
-                ),
+                _buildStyledButton(context, 'मराठी', 'म', const Page4()),
+                _buildStyledButton(context, 'తెలుగు', 'త', const Page5()),
+                _buildStyledButton(context, 'தமிழ்', 'த', const Page6()),
               ],
             ),
             const SizedBox(height: 20),
@@ -89,14 +73,14 @@ class LanguageSelectionPage extends StatelessWidget {
               children: [
                 _buildStyledButton(
                   context,
-                  'ಕನ್ನಡ',
-                  Icons.language,
-                  const Page7(),
-                ),
+                  'বাংলা',
+                  'ব',
+                  const Page1(),
+                ), // Bengali
                 _buildStyledButton(
                   context,
                   'മലയാളം',
-                  Icons.language,
+                  'മ',
                   const Page8(),
                 ), // Malayalam
                 _buildStyledButton(
@@ -125,7 +109,7 @@ class LanguageSelectionPage extends StatelessWidget {
   Widget _buildStyledButton(
     BuildContext context,
     String label,
-    IconData icon,
+    String firstLetter,
     Widget page,
   ) {
     return InkWell(
