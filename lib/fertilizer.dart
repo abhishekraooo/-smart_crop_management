@@ -4,10 +4,6 @@ import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const FertilizerApp());
-}
-
 class FertilizerApp extends StatelessWidget {
   const FertilizerApp({super.key});
 
@@ -155,7 +151,8 @@ class _FertilizerFormState extends State<FertilizerForm> {
     _previousYear = _yearController.text;
 
     try {
-      const apiKey = 'ZF5C64BLHOnXbb985TQEoR3x9fr3dTWbap5DoKkX'; // Replace with your Cohere key
+      const apiKey =
+          'ZF5C64BLHOnXbb985TQEoR3x9fr3dTWbap5DoKkX'; // Replace with your Cohere key
       const endpoint = 'https://api.cohere.ai/v1/generate';
 
       final response = await http.post(
@@ -191,8 +188,7 @@ class _FertilizerFormState extends State<FertilizerForm> {
         }
       } else {
         setState(() {
-          _errorMessage =
-              'API Error: ${response.statusCode}\n${response.body}';
+          _errorMessage = 'API Error: ${response.statusCode}\n${response.body}';
         });
       }
     } catch (e) {
@@ -230,9 +226,7 @@ class _FertilizerFormState extends State<FertilizerForm> {
                     child: ListView.builder(
                       itemCount: history.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(history[index]),
-                        );
+                        return ListTile(title: Text(history[index]));
                       },
                     ),
                   );
@@ -241,10 +235,7 @@ class _FertilizerFormState extends State<FertilizerForm> {
             },
           ),
           if (_predictionResult.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.volume_up),
-              onPressed: _speak,
-            ),
+            IconButton(icon: const Icon(Icons.volume_up), onPressed: _speak),
         ],
       ),
       body: Padding(
@@ -274,8 +265,9 @@ class _FertilizerFormState extends State<FertilizerForm> {
                             filled: true,
                             fillColor: Colors.grey[200],
                           ),
-                          validator: (value) =>
-                              value?.isEmpty ?? true ? 'Required' : null,
+                          validator:
+                              (value) =>
+                                  value?.isEmpty ?? true ? 'Required' : null,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -289,9 +281,11 @@ class _FertilizerFormState extends State<FertilizerForm> {
                             fillColor: Colors.grey[200],
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          validator: (value) =>
-                              value?.isEmpty ?? true ? 'Required' : null,
+                            decimal: true,
+                          ),
+                          validator:
+                              (value) =>
+                                  value?.isEmpty ?? true ? 'Required' : null,
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -308,8 +302,11 @@ class _FertilizerFormState extends State<FertilizerForm> {
                                   fillColor: Colors.grey[200],
                                 ),
                                 keyboardType: TextInputType.number,
-                                validator: (value) =>
-                                    value?.isEmpty ?? true ? 'Required' : null,
+                                validator:
+                                    (value) =>
+                                        value?.isEmpty ?? true
+                                            ? 'Required'
+                                            : null,
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -325,8 +322,11 @@ class _FertilizerFormState extends State<FertilizerForm> {
                                   fillColor: Colors.grey[200],
                                 ),
                                 keyboardType: TextInputType.number,
-                                validator: (value) =>
-                                    value?.isEmpty ?? true ? 'Required' : null,
+                                validator:
+                                    (value) =>
+                                        value?.isEmpty ?? true
+                                            ? 'Required'
+                                            : null,
                               ),
                             ),
                           ],
@@ -353,12 +353,13 @@ class _FertilizerFormState extends State<FertilizerForm> {
                     backgroundColor: Colors.green,
                   ),
                   onPressed: _isLoading ? null : _getFertilizerRecommendation,
-                  child: _isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : const Text(
-                          'Recommend',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                  child:
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : const Text(
+                            'Recommend',
+                            style: TextStyle(fontSize: 16),
+                          ),
                 ),
                 const SizedBox(height: 20),
                 if (_predictionResult.isNotEmpty)
@@ -375,7 +376,9 @@ class _FertilizerFormState extends State<FertilizerForm> {
                           const Text(
                             'Recommended Fertilizer:',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Text(

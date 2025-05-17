@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/model.dart';
+import 'package:hacksprint_mandya/pages/byproduct.dart';
+import 'package:hacksprint_mandya/pages/insurance.dart';
+import 'package:hacksprint_mandya/pages/marketrate.dart';
+import 'package:hacksprint_mandya/pages/shapeshift.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,18 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void didUpdateWidget(HomeScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Prevent reloading when navigating back
-    if (_location != null && _temperature != null) {
-      return;
-    }
-    _fetchLocationAndWeather();
-  }
-
-  final String _openWeatherApiKey =
-      'e227b5cc1d93809394d60d8db9aba89e'; // Replace with your actual key
+  final String _openWeatherApiKey = 'e227b5cc1d93809394d60d8db9aba89e';
 
   @override
   void initState() {
@@ -50,19 +47,14 @@ class _HomeScreenState extends State<HomeScreen>
 
     try {
       Position position = await _determinePosition();
-      debugPrint('Position: ${position.latitude}, ${position.longitude}');
-
       String cityName = await _reverseGeocode(
         position.latitude,
         position.longitude,
       );
-      debugPrint('City: $cityName');
-
       final weatherData = await _fetchWeatherData(
         position.latitude,
         position.longitude,
       );
-      debugPrint('Weather: $weatherData');
 
       setState(() {
         _location = cityName;
@@ -72,12 +64,10 @@ class _HomeScreenState extends State<HomeScreen>
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error: $e');
       setState(() {
         _isLoading = false;
         _error = e.toString();
       });
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load weather: ${e.toString()}')),
       );
@@ -139,17 +129,18 @@ class _HomeScreenState extends State<HomeScreen>
     double latitude,
     double longitude,
   ) async {
-    try {
-      final url =
-          'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$_openWeatherApiKey&units=metric';
-      debugPrint('Weather API URL: $url');
+    final url =
+        'https://api.openweathermap.org/data/2.5/weather?lat= $latitude&lon=$longitude&appid=$_openWeatherApiKey&units=metric';
 
-      final response = await http.get(Uri.parse(url));
+    try {
+      final client = http.Client();
+      final response = await client.get(Uri.parse(url)).catchError((err) {
+        debugPrint("Network error: $err");
+        throw "Failed to fetch weather data";
+      });
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
-        debugPrint('Weather response: $decoded');
-
         return {
           'temp': decoded['main']['temp'],
           'humidity': decoded['main']['humidity'],
@@ -180,115 +171,337 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  Widget _buildGridItem(BuildContext context, String title, Widget screen) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => screen),
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("AgriHack", style: TextStyle(color: Colors.green.shade900)),
-        backgroundColor: Colors.white,
+        title: null,
+        backgroundColor: Colors.green.shade100,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Weather Info Row - Icons Only
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Location Icon + Value
-                  Row(
-                    children: [
-                      Icon(Icons.location_on, color: Colors.green.shade800),
-                      const SizedBox(width: 4),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          _location ?? 'Loading...',
-                          style: const TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Weather Info Container - Responsive Design
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: constraints.maxWidth > 400 ? 16 : 8,
+                        vertical: 12,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child:
+                          _isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : _buildWeatherRow(constraints.maxWidth),
+                    ),
+
+                    // Plant Analysis Flow
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: constraints.maxWidth > 400 ? 16 : 8,
+                        vertical: 16,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade200),
+                      ),
+                      child: _buildPlantAnalysisRow(constraints.maxWidth),
+                    ),
+
+                    // Scan Button
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green.shade800,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Temperature Icon + Value
-                  Row(
-                    children: [
-                      Icon(Icons.thermostat, color: Colors.red.shade800),
-                      const SizedBox(width: 4),
-                      Text(
-                        _temperature != null
-                            ? "${_temperature!.toStringAsFixed(1)}°C"
-                            : "--",
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Humidity Icon + Value
-                  Row(
-                    children: [
-                      Icon(Icons.water_drop, color: Colors.blue.shade800),
-                      const SizedBox(width: 4),
-                      Text(
-                        _humidity != null ? "$_humidity%" : "--%",
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Condition Icon
-                  Icon(
-                    _getWeatherIcon(_condition),
-                    color: Colors.orange.shade800,
-                  ),
-
-                  const SizedBox(width: 8),
-
-                  // Refresh Button
-                  _isLoading
-                      ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                      : IconButton(
-                        icon: Icon(
-                          Icons.refresh,
-                          color: Colors.blue.shade600,
-                          size: 20,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ClassifierScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "SCAN",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        onPressed: _fetchLocationAndWeather,
                       ),
-                ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Grid Buttons Section
+                    Text(
+                      "Explore More",
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green.shade900,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Scrollable Grid View
+                    Expanded(
+                      child: SizedBox(
+                        height: 200,
+                        child: GridView.count(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 2.5,
+                          children: [
+                            _buildGridItem(
+                              context,
+                              "Crop Insurance",
+                              const InsurancePage(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Fertilizers",
+                              const FertilizerApp(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Shape Shifting",
+                              const ShapeShiftPAge(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "By-Product Farming",
+                              const ByProductScreen(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Market Rates",
+                              CropHistoryScreen(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Government Schemes",
+                              CropHistoryScreen(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Irrigation Tips",
+                              CropHistoryScreen(),
+                            ),
+                            _buildGridItem(
+                              context,
+                              "Weather Forecast",
+                              CropHistoryScreen(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-
-            const SizedBox(height: 20),
-
-            // Debug information
-            if (_error != null)
-              Text('Error: $_error', style: TextStyle(color: Colors.red)),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildWeatherRow(double screenWidth) {
+    final isWideScreen = screenWidth > 400;
+    return Flex(
+      direction: isWideScreen ? Axis.horizontal : Axis.vertical,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildWeatherItem(
+          icon: Icons.location_on,
+          color: Colors.green.shade800,
+          value: _location ?? '--',
+          isWideScreen: isWideScreen,
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        _buildWeatherItem(
+          icon: Icons.thermostat,
+          color: Colors.red.shade800,
+          value:
+              _temperature != null
+                  ? "${_temperature!.toStringAsFixed(1)}°C"
+                  : "--",
+          isWideScreen: isWideScreen,
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        _buildWeatherItem(
+          icon: Icons.water_drop,
+          color: Colors.blue.shade800,
+          value: _humidity != null ? "$_humidity%" : "--%",
+          isWideScreen: isWideScreen,
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        Icon(
+          _getWeatherIcon(_condition),
+          color: Colors.orange.shade800,
+          size: 20,
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        IconButton(
+          icon: Icon(Icons.refresh, color: Colors.blue.shade600, size: 20),
+          onPressed: _fetchLocationAndWeather,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWeatherItem({
+    required IconData icon,
+    required Color color,
+    required String value,
+    required bool isWideScreen,
+  }) {
+    return Row(
+      mainAxisAlignment:
+          isWideScreen ? MainAxisAlignment.start : MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: color, size: 20),
+        const SizedBox(width: 4),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 14),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlantAnalysisRow(double screenWidth) {
+    final isWideScreen = screenWidth > 500;
+    return Flex(
+      direction: isWideScreen ? Axis.horizontal : Axis.vertical,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        FaIcon(
+          FontAwesomeIcons.seedling,
+          color: Colors.green.shade800,
+          size: 30,
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        const Icon(Icons.arrow_downward, color: Colors.grey),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            "AI Analysis",
+            style: TextStyle(
+              color: Colors.blue.shade800,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        const Icon(Icons.arrow_downward, color: Colors.grey),
+        if (isWideScreen)
+          const SizedBox(width: 8)
+        else
+          const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            "Disease Prediction",
+            style: TextStyle(
+              color: Colors.orange.shade900,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
