@@ -24,14 +24,13 @@ class _HomeScreenState extends State<HomeScreen>
   double? _temperature;
   int? _humidity;
   String? _condition;
-
   bool _isLoading = false;
   String? _error;
 
+  final String _openWeatherApiKey = 'e227b5cc1d93809394d60d8db9aba89e';
+
   @override
   bool get wantKeepAlive => true;
-
-  final String _openWeatherApiKey = 'e227b5cc1d93809394d60d8db9aba89e';
 
   @override
   void initState() {
@@ -76,20 +75,16 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw 'Please enable location services';
-    }
+    if (!serviceEnabled) throw 'Please enable location services';
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+      if (permission == LocationPermission.denied)
         throw 'Location permissions are denied';
-      }
     }
-
     if (permission == LocationPermission.deniedForever) {
-      throw 'Location permissions are permanently denied, please enable them in app settings';
+      throw 'Location permissions are permanently denied. Please enable them in app settings.';
     }
 
     return await Geolocator.getCurrentPosition(
@@ -99,17 +94,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<String> _reverseGeocode(double latitude, double longitude) async {
     try {
-      final response = await http.get(
-        Uri.parse(
-          'https://nominatim.openstreetmap.org/reverse?format=json&lat=$latitude&lon=$longitude',
-        ),
-      );
+      final url =
+          'https://nominatim.openstreetmap.org/reverse?format=json&lat=$latitude&lon=$longitude'; // Fixed space
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
-        debugPrint('Reverse geocode response: $decoded');
-
-        // Try different address fields
         final address = decoded['address'];
         return address['city'] ??
             address['town'] ??
@@ -117,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
             address['county'] ??
             'Unknown location';
       } else {
-        throw 'Failed to reverse geocode: ${response.statusCode}';
+        throw 'Reverse geocode failed with status: ${response.statusCode}';
       }
     } catch (e) {
       debugPrint('Reverse geocode error: $e');
@@ -129,16 +119,21 @@ class _HomeScreenState extends State<HomeScreen>
     double latitude,
     double longitude,
   ) async {
-    final url =
-        'https://api.openweathermap.org/data/2.5/weather?lat= $latitude&lon=$longitude&appid=$_openWeatherApiKey&units=metric';
-
     try {
-      final client = http.Client();
-      final response = await client.get(Uri.parse(url)).catchError((err) {
-        debugPrint("Network error: $err");
-        throw "Failed to fetch weather data";
-      });
+      // Fixed space in URL
+      final url =
+          'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$_openWeatherApiKey&units=metric';
+      debugPrint('Fetching weather from: $url');
 
+      // Validate coordinates first
+      if (latitude < -90 ||
+          latitude > 90 ||
+          longitude < -180 ||
+          longitude > 180) {
+        throw 'Invalid coordinates: lat=$latitude, lon=$longitude';
+      }
+
+      final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
         return {
@@ -206,6 +201,9 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -226,10 +224,10 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Weather Info Container - Responsive Design
+                    // Weather Info Section
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth > 400 ? 16 : 8,
+                        horizontal: screenWidth > 400 ? 16 : 8,
                         vertical: 12,
                       ),
                       margin: const EdgeInsets.only(bottom: 20),
@@ -240,13 +238,13 @@ class _HomeScreenState extends State<HomeScreen>
                       child:
                           _isLoading
                               ? const Center(child: CircularProgressIndicator())
-                              : _buildWeatherRow(constraints.maxWidth),
+                              : _buildWeatherRow(screenWidth),
                     ),
 
                     // Plant Analysis Flow
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth > 400 ? 16 : 8,
+                        horizontal: screenWidth > 400 ? 16 : 8,
                         vertical: 16,
                       ),
                       margin: const EdgeInsets.only(bottom: 20),
@@ -255,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen>
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.green.shade200),
                       ),
-                      child: _buildPlantAnalysisRow(constraints.maxWidth),
+                      child: _buildPlantAnalysisRow(screenWidth),
                     ),
 
                     // Scan Button
@@ -287,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                     const SizedBox(height: 20),
 
-                    // Grid Buttons Section
+                    // Explore More Section
                     Text(
                       "Explore More",
                       style: GoogleFonts.poppins(
@@ -297,10 +295,8 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       textAlign: TextAlign.left,
                     ),
-
                     const SizedBox(height: 12),
 
-                    // Scrollable Grid View
                     Expanded(
                       child: SizedBox(
                         height: 200,
@@ -366,6 +362,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildWeatherRow(double screenWidth) {
     final isWideScreen = screenWidth > 400;
+
     return Flex(
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -445,6 +442,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildPlantAnalysisRow(double screenWidth) {
     final isWideScreen = screenWidth > 500;
+
     return Flex(
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
