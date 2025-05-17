@@ -1,24 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Crop Insurance',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const InsurancePage(),
-    );
-  }
-}
-
 class InsurancePage extends StatefulWidget {
   const InsurancePage({super.key});
 
@@ -63,9 +44,9 @@ class _InsurancePageState extends State<InsurancePage> {
 
   // Payment option multipliers
   final Map<String, double> _paymentMultipliers = {
-    'Monthly': 1.1,    // 10% extra for monthly
-    '6-Month': 1.05,   // 5% extra for 6-month
-    'Annually': 1.0,   // No extra for annual
+    'Monthly': 1.1, // 10% extra for monthly
+    '6-Month': 1.05, // 5% extra for 6-month
+    'Annually': 1.0, // No extra for annual
   };
 
   @override
@@ -224,9 +205,7 @@ class _InsurancePageState extends State<InsurancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crop Insurance'),
-      ),
+      appBar: AppBar(title: const Text('Crop Insurance')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -242,20 +221,21 @@ class _InsurancePageState extends State<InsurancePage> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.agriculture),
                 ),
-                items: _cropRates.keys.map((String crop) {
-                  return DropdownMenuItem<String>(
-                    value: crop,
-                    child: Text(crop),
-                  );
-                }).toList(),
+                items:
+                    _cropRates.keys.map((String crop) {
+                      return DropdownMenuItem<String>(
+                        value: crop,
+                        child: Text(crop),
+                      );
+                    }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCrop = newValue;
                     _isCalculated = false;
                   });
                 },
-                validator: (value) =>
-                    value == null ? 'Please select a crop' : null,
+                validator:
+                    (value) => value == null ? 'Please select a crop' : null,
               ),
               const SizedBox(height: 20),
 
@@ -284,10 +264,7 @@ class _InsurancePageState extends State<InsurancePage> {
               const SizedBox(height: 20),
 
               // Payment options
-              const Text(
-                'Payment Option:',
-                style: TextStyle(fontSize: 16),
-              ),
+              const Text('Payment Option:', style: TextStyle(fontSize: 16)),
               ..._paymentMultipliers.keys.map((option) {
                 return RadioListTile<String>(
                   title: Text(option),
@@ -314,16 +291,15 @@ class _InsurancePageState extends State<InsurancePage> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Calculate Premium',
-                    style: TextStyle(fontSize: 18)),
+                child: const Text(
+                  'Calculate Premium',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
               const SizedBox(height: 10),
 
               // Reset button
-              OutlinedButton(
-                onPressed: _resetForm,
-                child: const Text('Reset'),
-              ),
+              OutlinedButton(onPressed: _resetForm, child: const Text('Reset')),
               const SizedBox(height: 30),
 
               // Results display
@@ -349,8 +325,12 @@ class _InsurancePageState extends State<InsurancePage> {
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text('Crop',
-                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    'Crop',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -362,12 +342,18 @@ class _InsurancePageState extends State<InsurancePage> {
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text('Area',
-                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    'Area',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('${_areaController.text} hectares'),
+                                  child: Text(
+                                    '${_areaController.text} hectares',
+                                  ),
                                 ),
                               ],
                             ),
@@ -375,8 +361,12 @@ class _InsurancePageState extends State<InsurancePage> {
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text('Payment Option',
-                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    'Payment Option',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -388,13 +378,18 @@ class _InsurancePageState extends State<InsurancePage> {
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text('Base Rate',
-                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    'Base Rate',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      '₹${(_cropRates[_selectedCrop] ?? 0).toStringAsFixed(0)}/hectare'),
+                                    '₹${(_cropRates[_selectedCrop] ?? 0).toStringAsFixed(0)}/hectare',
+                                  ),
                                 ),
                               ],
                             ),
@@ -416,7 +411,11 @@ class _InsurancePageState extends State<InsurancePage> {
                               _showTerms = !_showTerms;
                             });
                           },
-                          child: Text(_showTerms ? 'Hide Terms' : 'Show Terms & Conditions'),
+                          child: Text(
+                            _showTerms
+                                ? 'Hide Terms'
+                                : 'Show Terms & Conditions',
+                          ),
                         ),
                       ],
                     ),
@@ -471,7 +470,9 @@ class _InsurancePageState extends State<InsurancePage> {
                         ),
                         const SizedBox(height: 10),
                         CheckboxListTile(
-                          title: const Text('I agree to the terms and conditions'),
+                          title: const Text(
+                            'I agree to the terms and conditions',
+                          ),
                           value: _acceptedTerms,
                           onChanged: (bool? value) {
                             setState(() {
@@ -482,27 +483,37 @@ class _InsurancePageState extends State<InsurancePage> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-  onPressed: _isProcessingPayment ? null : _proceedToPayment,
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.green[800],
-    padding: const EdgeInsets.symmetric(vertical: 16),
-  ),
-  child: _isProcessingPayment
-      ? const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(color: Colors.white),
-            SizedBox(width: 10),
-            Text('Processing...', style: TextStyle(color: Colors.white)),
-          ],
-        )
-      : Text( // Removed const here
-          'Proceed to Payment ₹${_premium.toStringAsFixed(0)}',
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-        ),
-), 
-],
-
+                          onPressed:
+                              _isProcessingPayment ? null : _proceedToPayment,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[800],
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child:
+                              _isProcessingPayment
+                                  ? const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        'Processing...',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  )
+                                  : Text(
+                                    // Removed const here
+                                    'Proceed to Payment ₹${_premium.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
