@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hacksprint_mandya/auth/auth_service.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
 import 'package:hacksprint_mandya/model.dart';
 import 'package:hacksprint_mandya/utils/home_navigators.dart';
 
@@ -40,7 +41,7 @@ class LanguageSelectionPage extends StatelessWidget {
                   context,
                   'English',
                   'E',
-                  MainNavigation(authService: AuthService()),
+                  CropPredictionScreen(),
                 ),
                 _buildStyledButton(
                   context,

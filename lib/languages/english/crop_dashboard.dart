@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hacksprint_mandya/fertilizer.dart';
 import 'package:hacksprint_mandya/model.dart';
 import 'package:hacksprint_mandya/pages/byproduct.dart';
+import 'package:hacksprint_mandya/pages/governmentschemes.dart';
 import 'package:hacksprint_mandya/pages/insurance.dart';
 import 'package:hacksprint_mandya/pages/marketrate.dart';
 import 'package:hacksprint_mandya/pages/shapeshift.dart';
@@ -334,17 +335,7 @@ class _HomeScreenState extends State<HomeScreen>
                             _buildGridItem(
                               context,
                               "Government Schemes",
-                              CropHistoryScreen(),
-                            ),
-                            _buildGridItem(
-                              context,
-                              "Irrigation Tips",
-                              CropHistoryScreen(),
-                            ),
-                            _buildGridItem(
-                              context,
-                              "Weather Forecast",
-                              CropHistoryScreen(),
+                              CropSchemesDropdownPage(),
                             ),
                           ],
                         ),
