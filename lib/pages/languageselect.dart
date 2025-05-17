@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hacksprint_mandya/auth/auth_service.dart';
-import 'package:hacksprint_mandya/fertilizer.dart';
+import 'package:hacksprint_mandya/pages/fertilizer.dart';
 import 'package:hacksprint_mandya/languages/bengali/crop_recommendation(npk)/crop_prediction_screen_be.dart';
 import 'package:hacksprint_mandya/languages/english/crop_recommendation(npk)/crop_prediction_screen.dart';
 import 'package:hacksprint_mandya/languages/gujarati/crop_recommendation(npk)/crop_prediction_screen_gu.dart';
@@ -12,7 +12,7 @@ import 'package:hacksprint_mandya/languages/marathi/crop_recommendation(npk)/cro
 import 'package:hacksprint_mandya/languages/tamil/crop_recommendation(npk)/crop_prediction_screen_tam.dart';
 import 'package:hacksprint_mandya/languages/telugu/crop_recommendation(npk)/crop_prediction_screen_tel.dart';
 import 'package:hacksprint_mandya/languages/urdu/crop_recommendation(npk)/crop_prediction_screen_ur.dart';
-import 'package:hacksprint_mandya/model.dart';
+import 'package:hacksprint_mandya/utils/model.dart';
 import 'package:hacksprint_mandya/utils/home_navigators.dart';
 
 class LanguageSelectionPage extends StatelessWidget {

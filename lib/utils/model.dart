@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
-import 'cure_details_page.dart';
+import '../pages/cure_details_page.dart';
 import 'cure_service.dart';
 
 class ClassifierScreen extends StatefulWidget {
@@ -53,10 +53,12 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
   Future<void> _loadLabels() async {
     try {
       final labelData = await rootBundle.loadString('assets/finallabels.txt');
-      _labels = labelData.split('\n')
-          .map((label) => label.trim())
-          .where((label) => label.isNotEmpty)
-          .toList();
+      _labels =
+          labelData
+              .split('\n')
+              .map((label) => label.trim())
+              .where((label) => label.isNotEmpty)
+              .toList();
     } catch (e) {
       final outputDim = _interpreter.getOutputTensor(0).shape.last;
       _labels = List.generate(outputDim, (i) => 'Class $i');
@@ -100,14 +102,18 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
         height: inputShape[1],
       );
 
-      final inputBuffer = _prepareInputBuffer(resized, inputTensor.type, inputShape);
+      final inputBuffer = _prepareInputBuffer(
+        resized,
+        inputTensor.type,
+        inputShape,
+      );
 
       final outputShape = _interpreter.getOutputTensor(0).shape;
       final outputBuffer = List.filled(
         outputShape.reduce((a, b) => a * b),
         0.0,
       ).reshape(outputShape);
-      
+
       _interpreter.run(inputBuffer, outputBuffer);
       _processOutput(outputBuffer[0]);
     } catch (e) {
@@ -120,7 +126,7 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
   void _processOutput(List<dynamic> output) {
     int maxIndex = 0;
     double maxConfidence = 0.0;
-    
+
     for (int i = 0; i < output.length; i++) {
       if (output[i] > maxConfidence) {
         maxConfidence = output[i].toDouble();
@@ -130,7 +136,8 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
 
     setState(() {
       _confidence = maxConfidence;
-      _prediction = maxIndex < _labels.length ? _labels[maxIndex] : 'Class $maxIndex';
+      _prediction =
+          maxIndex < _labels.length ? _labels[maxIndex] : 'Class $maxIndex';
       _showCureButton = true;
     });
   }
@@ -142,17 +149,22 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CureDetailsPage(
-          disease: _prediction,
-          cureInfo: cureInfo,
-          confidence: _confidence,
-          image: _image,
-        ),
+        builder:
+            (context) => CureDetailsPage(
+              disease: _prediction,
+              cureInfo: cureInfo,
+              confidence: _confidence,
+              image: _image,
+            ),
       ),
     );
   }
 
-  dynamic _prepareInputBuffer(img.Image image, TensorType type, List<int> shape) {
+  dynamic _prepareInputBuffer(
+    img.Image image,
+    TensorType type,
+    List<int> shape,
+  ) {
     if (type == TensorType.uint8) {
       return Uint8List.fromList(img.encodeJpg(image)).reshape(shape);
     } else {
@@ -207,9 +219,11 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
                   ),
                 )
               else
-                const Text('Select a plant image to diagnose',
-                    style: TextStyle(fontSize: 18)),
-              
+                const Text(
+                  'Select a plant image to diagnose',
+                  style: TextStyle(fontSize: 18),
+                ),
+
               if (_prediction.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 Card(
@@ -227,20 +241,23 @@ class _ClassifierScreenState extends State<ClassifierScreen> {
                             color: Colors.green,
                           ),
                         ),
-                        const SizedBox(height: 8),                        
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ),
                 ),
               ],
-              
+
               if (_showCureButton) ...[
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _navigateToCurePage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 15,
+                    ),
                   ),
                   child: const Text(
                     'Get Cure',
